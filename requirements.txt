@@ -1,0 +1,9 @@
+Django==4.1.3
+Pillow
+djangorestframework==3.14.0
+markdown
+opencv-python-headless
+django-sslserver
+django-cors-headers
+numpy
+face_recognition

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+            integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous">
+    </script>
+</head>
+<body>
+<video autoplay playsinline id="videoElement"></video>
+<canvas id="canvas" width="400" height="300"></canvas>
+<script>
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    const video = document.querySelector("#videoElement");
+
+    video.width = 400;
+    video.height = 300;
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({
+            video: true
+        })
+            .then(function (stream) {
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(function (err0r) {
+            });
+    }
+    var timerId = setInterval(send_image, 1000);
+
+    function send_image() {
+        width = video.width;
+        height = video.height;
+        context.drawImage(video, 0, 0, width, height);
+        var data = canvas.toDataURL('image/jpeg', 0.5);
+        context.clearRect(0, 0, width, height);
+        $.ajax({
+                type: 'POST',
+                url: "{% url 'recognize_user'  %}",
+                data: {
+                    'image': data,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    console.log(data)
+                },
+                error: function (response) {
+                    console.log('Error')
+                },
+            }
+        );
+    }
+</script>
+</body>
+</html>
