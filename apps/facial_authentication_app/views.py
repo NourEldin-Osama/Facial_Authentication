@@ -33,13 +33,17 @@ def add_user(request):
     if request.method == 'POST':
         try:
             username = request.POST.get('username')
-            if username is not None and username != "Unknown":
+            if username is not None and username != "Unknown" and username.strip() != "":
                 frame = request.POST.get('image')
                 img = image_from_js_to_cv2(frame)
 
-                with open("test.pkl", "rb") as f:
-                    known_face_encodings = pickle.load(f)
-                    known_face_names = pickle.load(f)
+                try:
+                    with open("test.pkl", "rb") as f:
+                        known_face_encodings = pickle.load(f)
+                        known_face_names = pickle.load(f)
+                except FileNotFoundError:
+                    known_face_encodings = []
+                    known_face_names = []
 
                 known_face_encodings.append(encode_user(img))
                 known_face_names.append(username)
@@ -52,6 +56,8 @@ def add_user(request):
             else:
                 if username is not None:
                     response = "Error username = None"
+                elif username.strip() != "":
+                    response = "Error username is empty"
                 else:
                     response = "Error username = Unknown"
         except Exception as e:
