@@ -24,7 +24,7 @@ def image_from_js_to_cv2(data):
     imgdata = base64.b64decode(data)
     np_arr = np.fromstring(imgdata, np.uint8)
     img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # concert to RGB
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # convert to RGB
     return img
 
 
