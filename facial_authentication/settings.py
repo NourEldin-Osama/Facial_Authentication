@@ -27,7 +27,7 @@ DEBUG = True
 
 local_ip = gethostbyname(gethostname())
 print(local_ip)
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', local_ip, ]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', local_ip, 'facialauthentication.pythonanywhere.com', ]
 
 # Application definition
 
